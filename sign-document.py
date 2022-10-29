@@ -13,12 +13,12 @@ class sign_document:
     def sign(self):
         signature = pkcs1_15.new(self.key).sign(self.h)
         return signature
-    def verify(self,signature):
-        try:
-            pkcs1_15.new(self.key).verify(self.h, signature)
-            print("The signature is valid.")
-        except (ValueError, TypeError):
-            print ("The signature is not valid.")
+    # def verify(self,signature):
+    #     try:
+    #         pkcs1_15.new(self.key).verify(self.h, signature)
+    #         print("The signature is valid.")
+    #     except (ValueError, TypeError):
+    #         print ("The signature is not valid.")
 if __name__ == '__main__':
     file_private_key='./output/private.pem'
     file_pdf="seni.pdf"
@@ -26,6 +26,6 @@ if __name__ == '__main__':
     signature=rsa.sign()
     print("Signature:")
     print(signature)
-    rsa.verify(signature)
+    # rsa.verify(signature)
     
 
