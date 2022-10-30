@@ -23,9 +23,9 @@ if __name__ == '__main__':
     file_private_key='./output/private.pem'
     file_public_key='./output/public.pem'
     
-    file_pdf="seni.pdf"
-    with open(file_pdf, 'rb') as fp:
-        message = fp.read()
+    # file_pdf="seni.pdf"
+    # with open(file_pdf, 'rb') as fp:
+    #     message = fp.read()
     message = b'we are different, work hard!'*100
 
     rsa=sign_document(file_private_key,file_public_key)   
