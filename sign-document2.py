@@ -1,41 +1,39 @@
 from Crypto.Signature import pkcs1_15
-from Crypto.Hash import SHA256
 from Crypto.PublicKey import RSA
-import codecs
+from Crypto.Cipher import PKCS1_v1_5
 
 class sign_document:
-    def __init__(self,file_pdf,file_private_key):
-        with open(file_pdf, 'rb') as fp:
-            message = fp.read()
-        self.key=RSA.import_key(open(file_private_key).read())
-        self.h = SHA256.new(message)
+    def __init__(self,file_private_key,file_public_key):
+        key_1 = RSA.importKey(open(file_public_key).read())
+        self.cipher_public = PKCS1_v1_5.new(key_1)
 
-    def sign(self):
-        signature = pkcs1_15.new(self.key).sign(self.h)
-        return signature
-    # def verify(self,signature):
-    #     try:
-    #         pkcs1_15.new(self.key).verify(self.h, signature)
-    #         print("The signature is valid.")
-    #     except (ValueError, TypeError):
-    #         print ("The signature is not valid.")
+        key_2 = RSA.importKey(open(file_private_key).read())
+        self.cipher_private = PKCS1_v1_5.new(key_2)
+    def encrypt(self,message,length=100):
+        res=[]
+        for i in range(0,len(message),length):
+            res.append(self.cipher_public.encrypt(message[i:i+length]))
+        return b''.join(res)
+    def decrypt(self,message,length=128):
+        res=[]
+        for i in range(0,len(message),length):
+            res.append(self.cipher_private.decrypt(message[i:i+length],'xyz'))
+        return b''.join(res) 
 if __name__ == '__main__':
-    from Crypto.PublicKey import RSA
+    file_private_key='./output/private.pem'
+    file_public_key='./output/public.pem'
+    
+    file_pdf="seni.pdf"
+    with open(file_pdf, 'rb') as fp:
+        message = fp.read()
+    message = b'we are different, work hard!'*100
 
-    keyPair = RSA.generate(bits=1024)
-    print(f"Public key:  (n={hex(keyPair.n)}, e={hex(keyPair.e)})")
-    print(f"Private key: (n={hex(keyPair.n)}, d={hex(keyPair.d)})")
-    # RSA sign the message
-    msg = b'A message for signing'
-    from hashlib import sha512
-    hash = int.from_bytes(sha512(msg).digest(), byteorder='big')
-    signature = pow(hash, keyPair.d, keyPair.n)
-    print("Signature:", hex(signature))
+    rsa=sign_document(file_private_key,file_public_key)   
+    ciphertext = rsa.encrypt(message,200)
+    # print("ciphertext:  "+str(ciphertext))
+    message = rsa.decrypt(ciphertext,256)
+    print("plaintext:  "+str(message))
 
-    # RSA verify signature
-    msg = b'A message for signing'
-    hash = int.from_bytes(sha512(msg).digest(), byteorder='big')
-    hashFromSignature = pow(signature, keyPair.e, keyPair.n)
-    print("Signature valid:", hash == hashFromSignature)
+    
     
 
