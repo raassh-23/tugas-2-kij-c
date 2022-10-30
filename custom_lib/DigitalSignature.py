@@ -2,7 +2,10 @@ from Cryptodome.Hash import SHA256
 from Cryptodome.PublicKey import RSA
 
 class DigitalSignature:
-    def __init__(self, file_private_key=None, file_public_key=None):
+    def __init__(self, file_private_key=None, file_public_key=None, passphrase=None):
+        # TODO: check if the keys are valid
+        # TODO: add support for password protected keys
+
         if file_private_key is not None:
             with open(file_private_key, 'rb') as fp:
                 self.private_key = RSA.importKey(fp.read())
