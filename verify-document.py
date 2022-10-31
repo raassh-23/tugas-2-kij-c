@@ -1,18 +1,22 @@
 from custom_lib.DigitalSignature import DigitalSignature
 from argparse import ArgumentParser
+from datetime import datetime
 from custom_lib.SignatureUtil import get_signature, get_content, add_signature
 from PyPDF2 import PdfReader, PdfWriter
 
 def verify(file_pdf, file_public_key, passphrase):
     ds = DigitalSignature(file_public_key=file_public_key)
     
-    signature = bytes.fromhex(get_signature(file_pdf)['Signature'])
+    signature_info = get_signature(file_pdf)
+    signature = bytes.fromhex(signature_info['Signature'])
     content = get_content(file_pdf)
 
     if ds.verify(content, signature):
-        print("File verified successfully")
+        print("File verified successfully.")
+        print("Author: " + signature_info['Author']) if signature_info['Author'] != "" else None
+        print("Date: " + datetime.strptime(signature_info['Date'], "%Y%m%d%H%M%S").strftime("%d/%m/%Y %H:%M:%S"))
     else:
-        print("File verification failed")
+        print("File verification failed.")
 
     pass
         

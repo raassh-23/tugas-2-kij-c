@@ -16,10 +16,10 @@ def get_signature(file_pdf):
         raise Exception("No signature found")
 
     signature = {}
-    for line in lines[-5:]:
+    for line in lines[-6:]:
         line = line.decode().strip()
         if line.startswith("/"):
-            key, value = line.split(" ")
+            key, value = line.split(" ", 1)
             signature[key[1:]] = value[1:-1]
 
     fp.close()
@@ -36,7 +36,7 @@ def get_content(file_pdf):
     input.close()
     return file_content
 
-def add_signature(file_pdf, output, signature, author = None):
+def add_signature(file_pdf, output, signature, author):
     with open(file_pdf, 'rb') as fp:
         file_signature = fp.readlines()[-1]
         if file_signature == b"signature>>":
@@ -53,7 +53,7 @@ def add_signature(file_pdf, output, signature, author = None):
     f.write(b"\n<<signature")
     f.write(b"\n/Signature (" + signature.encode() + b")")
     f.write(b"\n/Date (" + datetime.datetime.now().strftime("%Y%m%d%H%M%S%z").encode() + b")")
-    # f.write(b"\n/Author (" + (author.encode() if author else b"") + b")")
+    f.write(b"\n/Author (" + (author.encode() if author else b"") + b")")
     f.write(b"\nsignature>>")
 
     f.close()
