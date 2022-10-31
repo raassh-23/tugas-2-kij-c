@@ -36,25 +36,24 @@ def get_content(file_pdf):
     input.close()
     return file_content
 
-def add_signature(file_pdf, output, signature):
-    f = open(output, "wb+") if output is not None else open(file_pdf, "ab+")
-    if output is not None:
-        with open(file_pdf, 'rb') as fp:
-            f.write(fp.read())
+def add_signature(file_pdf, output, signature, author = None):
+    with open(file_pdf, 'rb') as fp:
+        file_signature = fp.readlines()[-1]
+        if file_signature == b"signature>>":
+            raise Exception("File already signed")
 
-    # file_signature = f.readlines()[-1]
-
-    # if file_signature == b"%%EOF":
-    #     raise Exception("No signature found")
-    # elif file_signature == b"signature>>":
-    #     raise Exception("File already signed")
+    f = open(output, "wb+") if output != file_pdf else open(file_pdf, "ab+")
+    if output != file_pdf:
+        original = open(file_pdf, 'rb')
+        f.write(original.read())
+        original.close()
 
     signature = signature.hex()
-    print(signature)
 
     f.write(b"\n<<signature")
     f.write(b"\n/Signature (" + signature.encode() + b")")
     f.write(b"\n/Date (" + datetime.datetime.now().strftime("%Y%m%d%H%M%S%z").encode() + b")")
+    # f.write(b"\n/Author (" + (author.encode() if author else b"") + b")")
     f.write(b"\nsignature>>")
 
     f.close()
