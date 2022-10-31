@@ -3,18 +3,21 @@ from Cryptodome.PublicKey import RSA
 
 class DigitalSignature:
     def __init__(self, file_private_key=None, file_public_key=None, passphrase=None):
-        # TODO: check if the keys are valid
-        # TODO: add support for password protected keys
-
         if file_private_key is not None:
             with open(file_private_key, 'rb') as fp:
-                self.private_key = RSA.importKey(fp.read())
+                self.private_key = RSA.importKey(fp.read(), passphrase=passphrase)
+
+            if not self.private_key.has_private():
+                raise ValueError("The provided private key is not a private key")
         else:
             self.private_key = None
 
         if file_public_key is not None:
             with open(file_public_key, 'rb') as fp:
-                self.public_key = RSA.importKey(fp.read())
+                self.public_key = RSA.importKey(fp.read(), passphrase=passphrase)
+            
+            if self.public_key.has_private():
+                raise ValueError("The provided public key is not a public key")
         else:
             self.public_key = None
         
@@ -66,9 +69,18 @@ if __name__ == '__main__':
     sign2 = DigitalSignature(file_private_key2, file_public_key)
     
     signature = sign.signature(file_pdf)
-    print(signature)
+    print(signature.hex())
     print(sign.verify(file_pdf, signature))
 
     signature2 = sign2.signature(file_pdf)
-    print(signature2)
+    print(signature2.hex())
     print(sign2.verify(file_pdf, signature2))
+
+    file_private_key_pass = './output/private_pass.pem'
+    file_public_key_pass = './output/public_pass.pem'
+
+    sign_pass = DigitalSignature(file_private_key_pass, file_public_key_pass, "test")
+
+    signature_pass = sign_pass.signature(file_pdf)
+    print(signature2.hex())
+    print(sign_pass.verify(file_pdf, signature_pass))
