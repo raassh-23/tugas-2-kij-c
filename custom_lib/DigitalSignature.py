@@ -47,10 +47,7 @@ class DigitalSignature:
         result = self._encrypt(plaintext)
         return result.to_bytes(256, 'big')
         
-    def verify(self, file_pdf, signature):
-        with open(file_pdf, 'rb') as fp:
-            message = fp.read()
-
+    def verify(self, message, signature):
         hash_value = SHA256.new(message).digest()
         hash_as_int = int.from_bytes(hash_value, 'big')
         

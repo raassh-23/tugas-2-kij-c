@@ -129,6 +129,8 @@ dmypy.json
 .pyre/
 
 output/
+sample/
 
 test.pdf
 test/
+test.py

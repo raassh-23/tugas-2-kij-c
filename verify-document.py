@@ -1,9 +1,19 @@
 from custom_lib.DigitalSignature import DigitalSignature
 from argparse import ArgumentParser
+from custom_lib.SignatureUtil import get_signature, get_content, add_signature
+from PyPDF2 import PdfReader, PdfWriter
 
-def verify(file_pdf, file_signature, file_public_key, passphrase):
+def verify(file_pdf, file_public_key, passphrase):
     ds = DigitalSignature(file_public_key=file_public_key)
-    # TODO: implement this function
+    
+    signature = bytes.fromhex(get_signature(file_pdf)['Signature'])
+    content = get_content(file_pdf)
+
+    if ds.verify(content, signature):
+        print("File verified successfully")
+    else:
+        print("File verification failed")
+
     pass
         
 if __name__ == '__main__':
@@ -14,11 +24,6 @@ if __name__ == '__main__':
     parser.add_argument(
         '-i', '--input',
         help = 'Input file',
-        required = True
-    )
-    parser.add_argument(
-        '-s', '--signature',
-        help = 'Signature file',
         required = True
     )
     parser.add_argument(
@@ -35,6 +40,6 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     try:
-        verify(args.input, args.signature, args.key, args.passphrase)
+        verify(args.input, args.key, args.passphrase)
     except Exception as e:
         print(f'Error: {e}')

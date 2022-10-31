@@ -1,10 +1,15 @@
 from custom_lib.DigitalSignature import DigitalSignature
+from custom_lib.SignatureUtil import add_signature
 from argparse import ArgumentParser
+from PyPDF2 import PdfReader, PdfWriter
 
 def sign(file_pdf, output_file, file_private_key, passphrase):
     ds = DigitalSignature(file_private_key=file_private_key)
-    # TODO: implement this function
-    pass
+    signature = ds.signature(file_pdf)
+
+    add_signature(file_pdf, output_file, signature)
+
+    print("File signed successfully")
         
 if __name__ == '__main__':
     parser = ArgumentParser(
