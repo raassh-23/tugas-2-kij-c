@@ -55,7 +55,7 @@ Path to save the signed PDF file, optional, default to output.pdf
 Path to private key file, required, generate with generate-key-pair.py if needed
     
 -a AUTHOR, --author AUTHOR
-Author of the signature, optional
+Author of the signature, optional, max 60 characters
 
 -p PASSPHRASE, --passphrase PASSPHRASE
 Passphrase for the key, optional

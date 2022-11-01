@@ -1,6 +1,7 @@
 from Cryptodome.PublicKey import RSA
 import os
 from argparse import ArgumentParser
+import sys
 
 def generate_key_pair(output_path="output", key_size=2048, passphrase=None):
     os.makedirs(output_path, exist_ok=True)
@@ -45,3 +46,4 @@ if __name__ == "__main__":
         generate_key_pair(args.output, args.size, args.passphrase)
     except Exception as e:
         print(f'Error: {e}')
+        sys.exit(1)

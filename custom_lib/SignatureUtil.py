@@ -37,10 +37,13 @@ def get_content(file_pdf):
     return file_content
 
 def add_signature(file_pdf, output, signature, author):
+    if len(author) > 60:
+        raise ValueError("Author name too long")
+
     with open(file_pdf, 'rb') as fp:
         file_signature = fp.readlines()[-1]
         if file_signature == b"signature>>":
-            raise Exception("File already signed")
+            raise FileExistsError("File already signed")
 
     f = open(output, "wb+") if output != file_pdf else open(file_pdf, "ab+")
     if output != file_pdf:

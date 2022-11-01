@@ -1,6 +1,7 @@
 from custom_lib.DigitalSignature import DigitalSignature
 from custom_lib.SignatureUtil import add_signature
 from argparse import ArgumentParser
+import sys
 
 def sign(file_pdf, output_file, file_private_key, author, passphrase):
     ds = DigitalSignature(file_private_key=file_private_key, passphrase=passphrase)
@@ -32,7 +33,7 @@ if __name__ == '__main__':
     )
     parser.add_argument(
         '-a', '--author',
-        help = 'Author of the signature',
+        help = 'Author of the signature, max 60 characters',
         default = None
     )    
     parser.add_argument(

@@ -2,8 +2,7 @@ import sys
 from custom_lib.DigitalSignature import DigitalSignature
 from argparse import ArgumentParser
 from datetime import datetime
-from custom_lib.SignatureUtil import get_signature, get_content, add_signature
-from PyPDF2 import PdfReader, PdfWriter
+from custom_lib.SignatureUtil import get_signature, get_content
 
 def verify(file_pdf, file_public_key, passphrase):
     ds = DigitalSignature(file_public_key=file_public_key, passphrase=passphrase)
