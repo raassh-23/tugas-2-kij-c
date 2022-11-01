@@ -21,7 +21,7 @@ python3 generate-key-pair.py [-o OUTPUT] [-s SIZE] [-p PASSPHRASE]
 Sign a pdf file by running:
 
 ```
-python3 sign-document.py -i INPUT -k KEY [-o OUTPUT] [-p PASSPHRASE]
+python3 sign-document.py -i INPUT -k KEY [-o OUTPUT] [-a AUTHOR] [-p PASSPHRASE]
 ```
 
 ## Verify a pdf
@@ -29,5 +29,5 @@ python3 sign-document.py -i INPUT -k KEY [-o OUTPUT] [-p PASSPHRASE]
 Verify the signature of a pdf file by running:
 
 ```
-python3 verify-document.py -i INPUT -s SIGNATURE -k KEY [-p PASSPHRASE]
+python3 verify-document.py -i INPUT -k KEY [-p PASSPHRASE]
 ```
