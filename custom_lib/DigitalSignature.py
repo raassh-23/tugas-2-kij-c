@@ -36,6 +36,7 @@ class DigitalSignature:
 
         if not 0 <= ciphertext < self.public_key.n:
             raise ValueError("Message too large")
+            
         return int(pow(ciphertext, self.public_key.e, self.public_key.n))
     
     def signature(self, file_pdf):

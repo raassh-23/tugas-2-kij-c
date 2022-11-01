@@ -1,3 +1,4 @@
+import sys
 from custom_lib.DigitalSignature import DigitalSignature
 from argparse import ArgumentParser
 from datetime import datetime
@@ -5,7 +6,7 @@ from custom_lib.SignatureUtil import get_signature, get_content, add_signature
 from PyPDF2 import PdfReader, PdfWriter
 
 def verify(file_pdf, file_public_key, passphrase):
-    ds = DigitalSignature(file_public_key=file_public_key)
+    ds = DigitalSignature(file_public_key=file_public_key, passphrase=passphrase)
     
     signature_info = get_signature(file_pdf)
     signature = bytes.fromhex(signature_info['Signature'])
@@ -27,17 +28,17 @@ if __name__ == '__main__':
     )
     parser.add_argument(
         '-i', '--input',
-        help = 'Input file',
+        help = 'Path to PDF file to be verified',
         required = True
     )
     parser.add_argument(
         '-k', '--key',
-        help = 'Public key file',
+        help = 'Path to public key file, generate with generate-key-pair.py if needed',
         required = True
     )
     parser.add_argument(
         '-p', '--passphrase',
-        help = 'Passphrase',
+        help = 'Passphrase for the key',
         default = None
     )
 
@@ -47,3 +48,4 @@ if __name__ == '__main__':
         verify(args.input, args.key, args.passphrase)
     except Exception as e:
         print(f'Error: {e}')
+        sys.exit(1)

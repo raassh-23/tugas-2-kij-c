@@ -1,10 +1,9 @@
 from custom_lib.DigitalSignature import DigitalSignature
 from custom_lib.SignatureUtil import add_signature
 from argparse import ArgumentParser
-from PyPDF2 import PdfReader, PdfWriter
 
 def sign(file_pdf, output_file, file_private_key, author, passphrase):
-    ds = DigitalSignature(file_private_key=file_private_key)
+    ds = DigitalSignature(file_private_key=file_private_key, passphrase=passphrase)
     signature = ds.signature(file_pdf)
 
     add_signature(file_pdf, output_file, signature, author)
@@ -18,17 +17,17 @@ if __name__ == '__main__':
     )
     parser.add_argument(
         '-i', '--input',
-        help = 'Input file',
+        help = 'Path to PDF file to be signed',
         required = True
     )
     parser.add_argument(
         '-o', '--output',
-        help = 'Output file',
+        help = 'Path to save the signed PDF file',
         default='output.pdf'
     )
     parser.add_argument(
         '-k', '--key',
-        help = 'Private key file',
+        help = 'Path to private key file, generate with generate-key-pair.py if needed',
         required = True
     )
     parser.add_argument(
@@ -38,7 +37,7 @@ if __name__ == '__main__':
     )    
     parser.add_argument(
         '-p', '--passphrase',
-        help = 'Passphrase',
+        help = 'Passphrase for the key',
         default = None
     )
 
@@ -48,4 +47,5 @@ if __name__ == '__main__':
         sign(args.input, args.output, args.key, args.author, args.passphrase)
     except Exception as e:
         print(f'Error: {e}')
+        sys.exit(1)
 

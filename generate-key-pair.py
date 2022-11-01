@@ -24,18 +24,18 @@ if __name__ == "__main__":
     )
     parser.add_argument(
         '-o', '--output',
-        help = 'Output directory',
+        help = 'Path to directory where the keys will be saved',
         default = 'output'
     )
     parser.add_argument(
         '-s', '--size',
-        help = 'Key size',
+        help = 'Key size in bits',
         default = 2048,
         type = int
     )
     parser.add_argument(
         '-p', '--passphrase',
-        help = 'Passphrase',
+        help = 'Passphrase for the key',
         default = None
     )
 
