@@ -17,8 +17,6 @@ def verify(file_pdf, file_public_key, passphrase):
         print("Date: " + datetime.strptime(signature_info['Date'], "%Y%m%d%H%M%S").strftime("%d/%m/%Y %H:%M:%S"))
     else:
         print("File verification failed.")
-
-    pass
         
 if __name__ == '__main__':
     parser = ArgumentParser(

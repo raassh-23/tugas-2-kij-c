@@ -13,7 +13,7 @@ def get_signature(file_pdf):
     file_signature = lines[-1]
 
     if file_signature != b"signature>>":
-        raise Exception("No signature found")
+        raise FileNotFoundError("No signature found")
 
     signature = {}
     for line in lines[-6:]:
@@ -27,17 +27,17 @@ def get_signature(file_pdf):
     return signature
 
 def get_content(file_pdf):
-    input = open(file_pdf, 'rb')
+    file_input = open(file_pdf, 'rb')
 
     with BytesIO() as fp:
-        fp.write(input.read().split(b"\n<<signature")[0])
+        fp.write(file_input.read().split(b"\n<<signature")[0])
         file_content = fp.getvalue()
     
-    input.close()
+    file_input.close()
     return file_content
 
 def add_signature(file_pdf, output, signature, author):
-    if len(author) > 60:
+    if author is not None and len(author) > 60:
         raise ValueError("Author name too long")
 
     with open(file_pdf, 'rb') as fp:
